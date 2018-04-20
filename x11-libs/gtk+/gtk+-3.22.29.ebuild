@@ -129,6 +129,11 @@ src_prepare() {
 	# Fix broken autotools logic
 	eapply "${FILESDIR}"/${PN}-3.22.20-libcloudproviders-automagic.patch
 
+	# Restore previous type completion feature
+	# https://bugzilla.gnome.org/show_bug.cgi?id=754302
+	# https://aur.archlinux.org/packages/gtk3-typeahead/
+	eapply "${FILESDIR}"/${PN}-3.22.29-typeahead.patch
+
 	eautoreconf
 	gnome2_src_prepare
 }
