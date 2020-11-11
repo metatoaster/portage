@@ -121,6 +121,8 @@ src_prepare() {
 	epatch "${FILESDIR}"/${PN}-2.8.14-blend-center.patch  # bug 558878
 	epatch "${FILESDIR}"/${PN}-2.7.4-no-deprecation.patch  # bug 395695, comment 9 and 16
 	epatch "${FILESDIR}"/${PN}-2.8.10-clang.patch # bug 449370 compile with clang
+	epatch "${FILESDIR}"/${P}-Don-t-crash-when-a-plugin-defines-an-invalid-property-nam.patch
+	epatch "${FILESDIR}"/${P}-Fix-invalid-property-name-in-pagecurl-plugin.patch
 
 	sed -i -e 's/== "xquartz"/= "xquartz"/' configure.ac || die #494864
 	eautoreconf  # If you remove this: remove dev-util/gtk-doc-am from DEPEND, too
