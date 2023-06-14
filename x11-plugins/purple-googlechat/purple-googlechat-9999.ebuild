@@ -10,6 +10,8 @@ EGIT_REPO_URI="https://github.com/EionRobb/purple-googlechat"
 LICENSE="GPL-3"
 SLOT="0"
 
-RDEPEND="net-im/pidgin"
+RDEPEND="
+		dev-libs/protobuf-c
+		net-im/pidgin"
 DEPEND="${RDEPEND}
         virtual/pkgconfig"
