@@ -15,7 +15,7 @@ HOMEPAGE="https://wiki.gnome.org/Projects/NetworkManager"
 LICENSE="GPL-2+"
 SLOT="0" # add subslot if libnm-util.so.2 or libnm-glib.so.4 bumps soname version
 
-IUSE="audit bluetooth connection-sharing consolekit +dhclient dhcpcd elogind gnutls +introspection iwd json kernel_linux +nss +modemmanager ncurses ofono ovs policykit +ppp resolvconf selinux systemd teamd test vala +wext +wifi"
+IUSE="audit bluetooth connection-sharing consolekit +dhclient dhcpcd elogind gnutls +introspection iwd json kernel_linux +nss +modemmanager ncurses ofono ovs policykit resolvconf selinux systemd teamd test vala +wext +wifi"
 RESTRICT="!test? ( test )"
 
 REQUIRED_USE="
@@ -61,7 +61,6 @@ COMMON_DEPEND="
 		>=net-libs/gnutls-2.12:=[${MULTILIB_USEDEP}] ) )
 	ofono? ( net-misc/ofono )
 	ovs? ( dev-libs/jansson )
-	ppp? ( >=net-dialup/ppp-2.4.5:=[ipv6] )
 	resolvconf? ( net-dns/openresolv )
 	selinux? ( sys-libs/libselinux )
 	systemd? ( >=sys-apps/systemd-209:0= )
@@ -195,7 +194,7 @@ multilib_src_configure() {
 		$(use_with dhcpcd)
 		$(multilib_native_use_enable introspection)
 		$(use_enable json json-validation)
-		$(multilib_native_use_enable ppp)
+		--disable-ppp
 		--without-libpsl
 		$(multilib_native_use_with modemmanager modem-manager-1)
 		$(multilib_native_use_with ncurses nmtui)
@@ -214,14 +213,6 @@ multilib_src_configure() {
 		$(multilib_native_use_with wext)
 		$(multilib_native_use_enable wifi)
 	)
-
-	# Same hack as net-dialup/pptpd to get proper plugin dir for ppp, bug #519986
-	if use ppp; then
-		local PPPD_VER=`best_version net-dialup/ppp`
-		PPPD_VER=${PPPD_VER#*/*-} #reduce it to ${PV}-${PR}
-		PPPD_VER=${PPPD_VER%%[_-]*} # main version without beta/pre/patch/revision
-		myconf+=( --with-pppd-plugin-dir=/usr/$(get_libdir)/pppd/${PPPD_VER} )
-	fi
 
 	# unit files directory needs to be passed only when systemd is enabled,
 	# otherwise systemd support is not disabled completely, bug #524534
